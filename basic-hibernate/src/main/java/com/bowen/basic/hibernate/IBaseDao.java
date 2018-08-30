@@ -1,6 +1,8 @@
 package com.bowen.basic.hibernate;
 
 
+import com.bowen.basic.model.Pager;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,15 +20,70 @@ public interface IBaseDao<T> {
 
     /**
      * 不分页对象
-     * @param sql  查询对象的sql
+     * @param hql  查询对象的hql
      * @param args 查询参数
      * @return  一组不分页的对象 */
-    public List<T> list(String sql,Object[] args);
-    public List<T> list(String sql, Object args);
-    public List<T> list(String sql);
+    public List<T> list(String hql,Object[] args);
+    public List<T> list(String hql, Object args);
+    public List<T> list(String hql);
 
     /**基于别名和查询参数的混合列表对象*/
-    public List<T> list(String sql, Object[] args, Map<String,Object> alias);
-    public List<T> list(String sql, Map<String, Object> alias);
+    public List<T> list(String hql, Object[] args, Map<String,Object> alias);
+    public List<T> list(String hql, Map<String, Object> alias);
+
+
+
+    /**
+     * 分页对象
+     * @param hql  查询对象的hql
+     * @param args 查询参数
+     * @return  一组不分页的对象 */
+    public Pager<T> find(String hql, Object[] args);
+    public Pager<T> find(String hql, Object args);
+    public Pager<T> find(String hql);
+
+    /**基于别名和查询参数的混合列表对象*/
+    public Pager<T> findst(String hql, Object[] args, Map<String,Object> alias);
+    public Pager  <T> find(String hql, Map<String, Object> alias);
+
+    /**根据hql查询一组对象*/
+    public Object queryObject(String hql, Object[] args);
+    public Object queryObject(String hql, Object args);
+    public Object queryObject(String hql);
+
+    /**根据hql更新一组对象*/
+    public Object updateByHql(String hql, Object[] args);
+    public Object updateByHql(String hql, Object args);
+    public Object updateByHql(String hql);
+
+
+    /**
+     * 根据SQL查询不分页对象，不包含关联
+     * @param sql 查询的sql语句
+     * @param args 查询条件
+     * @param clz  查询的实体对象
+     * @param hasEntity 该对象是否是一个hibernate所管理的实体对象，如果不是，需要使用setResultTransform查询
+     * @return 一组对象*/
+    public List<T> listBySql(String sql, Object[] args, Class<T> clz, boolean hasEntity);
+    public List<T> listBySql(String sql, Object args, Class<T> clz, boolean hasEntity);
+    public List<T> listBySql(String sql,Class<T> clz, boolean hasEntity);
+    public List<T> listBySql(String sql, Object[] args, Map<String,Object> alias, Class<T> clz, boolean hasEntity);
+    public List<T> listBySql(String sql, Map<String, Object> alias, Class<T> clz, boolean hasEntity);
+
+
+    /**
+     * 根据SQL查询分页对象，不包含关联
+     * @param sql 查询的sql语句
+     * @param args 查询条件
+     * @param clz  查询的实体对象
+     * @param hasEntity 该对象是否是一个hibernate所管理的实体对象，如果不是，需要使用setResultTransform查询
+     * @return 一组对象*/
+    public Pager<T> findBySql(String sql, Object[] args, Class<T> clz, boolean hasEntity);
+    public Pager<T> findBySql(String sql, Object args, Class<T> clz, boolean hasEntity);
+    public Pager<T> findBySql(String sql,Class<T> clz, boolean hasEntity);
+    public Pager<T> findBySql(String sql, Object[] args, Map<String,Object> alias, Class<T> clz, boolean hasEntity);
+    public Pager<T> findBySql(String sql, Map<String, Object> alias, Class<T> clz, boolean hasEntity);
+
+
 
 }
