@@ -5,13 +5,13 @@ package com.bowen.basic.model;
  * */
 public class SystemContext {
     /**分页大小*/
-    private static ThreadLocal<Integer> pageSize;
+    private static ThreadLocal<Integer> pageSize = new ThreadLocal<Integer>();
     /**分页的起始页*/
-    private static ThreadLocal<Integer> pageOffset;
+    private static ThreadLocal<Integer> pageOffset = new ThreadLocal<Integer>();
     /**列表的排序字段*/
-    private static ThreadLocal<String> sort;
+    private static ThreadLocal<String> sort = new ThreadLocal<String>();
     /**列表的排序方式（升序，降序）*/
-    private static ThreadLocal<String> order;
+    private static ThreadLocal<String> order = new ThreadLocal<String>();
 
     public static Integer getPageSize() {
         return pageSize.get();
