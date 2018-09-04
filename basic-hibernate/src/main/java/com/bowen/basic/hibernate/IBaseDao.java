@@ -29,7 +29,7 @@ public interface IBaseDao<T> {
 
     /**基于别名和查询参数的混合列表对象*/
     public List<T> list(String hql, Object[] args, Map<String,Object> alias);
-    public List<T> list(String hql, Map<String, Object> alias);
+    public List<T> listByAlias(String hql, Map<String, Object> alias);
 
 
 
@@ -39,12 +39,12 @@ public interface IBaseDao<T> {
      * @param args 查询参数
      * @return  一组不分页的对象 */
     public Pager<T> find(String hql, Object[] args);
-    public Pager<T> find(String hql, Object args);
+    public Pager<T> find(String hql, Object arg);
     public Pager<T> find(String hql);
 
     /**基于别名和查询参数的混合列表对象*/
-    public Pager<T> findst(String hql, Object[] args, Map<String,Object> alias);
-    public Pager  <T> find(String hql, Map<String, Object> alias);
+    public Pager<T> find(String hql, Object[] args, Map<String,Object> alias);
+    public Pager  <T> findByAlias(String hql, Map<String, Object> alias);
 
     /**根据hql查询一组对象*/
     public Object queryObject(String hql, Object[] args);
@@ -68,7 +68,7 @@ public interface IBaseDao<T> {
     public List<T> listBySql(String sql, Object args, Class<T> clz, boolean hasEntity);
     public List<T> listBySql(String sql,Class<T> clz, boolean hasEntity);
     public List<T> listBySql(String sql, Object[] args, Map<String,Object> alias, Class<T> clz, boolean hasEntity);
-    public List<T> listBySql(String sql, Map<String, Object> alias, Class<T> clz, boolean hasEntity);
+    public List<T> listByAliasSql(String sql, Map<String, Object> alias, Class<T> clz, boolean hasEntity);
 
 
     /**
@@ -82,7 +82,7 @@ public interface IBaseDao<T> {
     public Pager<T> findBySql(String sql, Object args, Class<T> clz, boolean hasEntity);
     public Pager<T> findBySql(String sql,Class<T> clz, boolean hasEntity);
     public Pager<T> findBySql(String sql, Object[] args, Map<String,Object> alias, Class<T> clz, boolean hasEntity);
-    public Pager<T> findBySql(String sql, Map<String, Object> alias, Class<T> clz, boolean hasEntity);
+    public Pager<T> findByAliasSql(String sql, Map<String, Object> alias, Class<T> clz, boolean hasEntity);
 
 
 

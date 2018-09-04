@@ -16,7 +16,7 @@ public class Pager<T> {
     /**分页起始页*/
     private int offset;
     /**分页总大小*/
-    private int total;
+    private long total;
 
     /**分页的数据*/
     private List<T> datas;
@@ -38,11 +38,11 @@ public class Pager<T> {
         this.offset = offset;
     }
 
-    public int getTotal() {
+    public long getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(long total) {
         this.total = total;
     }
 

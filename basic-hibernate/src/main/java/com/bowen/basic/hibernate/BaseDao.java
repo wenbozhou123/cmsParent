@@ -43,6 +43,7 @@ public class BaseDao<T> implements IBaseDao<T> {
      *
      * @param t
      */
+    @Override
     public T add(T t) {
         getSession().save(t);
         return t;
@@ -53,6 +54,7 @@ public class BaseDao<T> implements IBaseDao<T> {
      *
      * @param t
      */
+    @Override
     public void update(T t) {
         getSession().update(t);
     }
@@ -62,6 +64,7 @@ public class BaseDao<T> implements IBaseDao<T> {
      *
      * @param id
      */
+    @Override
     public void delete(int id) {
         getSession().delete(this.load(id));
     }
@@ -71,6 +74,7 @@ public class BaseDao<T> implements IBaseDao<T> {
      *
      * @param id
      */
+    @Override
     public T load(int id) {
         return (T)getSession().load(getClz(),id);
     }
@@ -82,27 +86,23 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param args 查询参数
      * @return 一组不分页的对象
      */
+    @Override
     public List<T> list(String hql, Object[] args) {
-
-        return null;
+        return this.list(hql,args,null);
     }
 
-    public List<T> list(String hql, Object args) {
-        return null;
+    @Override
+    public List<T> list(String hql, Object arg) {
+        return this.list(hql, new Object[]{arg});
     }
 
+    @Override
     public List<T> list(String hql) {
-        return null;
+        return this.list(hql,null);
     }
 
-    /**
-     * 基于别名和查询参数的混合列表对象
-     *
-     * @param hql
-     * @param args
-     * @param alias
-     */
-    public List<T> list(String hql, Object[] args, Map<String, Object> alias) {
+
+    private String initSort(String hql){
         String order = SystemContext.getOrder();
         String sort = SystemContext.getSort();
         if (sort != null && "".equals(sort.trim()) ){
@@ -113,31 +113,51 @@ public class BaseDao<T> implements IBaseDao<T> {
                 hql += " desc";
             }
         }
-        Query query = getSession().createQuery(hql);
+        return hql;
+    }
+
+    private void setAliasParameter(Query query, Map<String, Object> alias){
         if(alias != null){
             Set<String> keys =  alias.keySet();
             for(String key : keys){
-                 Object val = alias.get(key);
-                 if(val instanceof Collection){
-                     //查询条件是列表
-                     query.setParameterList(key, (Collection) val);
-                 }else{
-                     query.setParameter(key, val);
-                 }
+                Object val = alias.get(key);
+                if(val instanceof Collection){
+                    //查询条件是列表
+                    query.setParameterList(key, (Collection) val);
+                }else{
+                    query.setParameter(key, val);
+                }
             }
         }
+    }
+
+    private void setParameter(Query query, Object[] args){
         if(args != null && args.length > 0){
             int index = 0;
             for( Object arg : args) {
                 query.setParameter(index++,arg);
             }
         }
-
+    }
+    /**
+     * 基于别名和查询参数的混合列表对象
+     *
+     * @param hql
+     * @param args
+     * @param alias
+     */
+    @Override
+    public List<T> list(String hql, Object[] args, Map<String, Object> alias) {
+        hql = initSort(hql);
+        Query query = getSession().createQuery(hql);
+        setAliasParameter(query,alias);
+        setParameter(query, args);
         return query.list();
     }
 
-    public List<T> list(String hql, Map<String, Object> alias) {
-        return null;
+    @Override
+    public List<T> listByAlias(String hql, Map<String, Object> alias) {
+        return this.list(hql,null,alias);
     }
 
     /**
@@ -147,18 +167,40 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param args 查询参数
      * @return 一组不分页的对象
      */
+    @Override
     public Pager<T> find(String hql, Object[] args) {
-        return null;
+        return this.find(hql ,args, null);
     }
 
-    public Pager<T> find(String hql, Object args) {
-        return null;
+    @Override
+    public Pager<T> find(String hql, Object arg) {
+        return this.find(hql, new Object[]{arg});
     }
 
+    @Override
     public Pager<T> find(String hql) {
-        return null;
+        return this.find(hql, null);
     }
 
+
+    private void setPager(Query query, Pager<T> pages){
+        Integer pageSize = SystemContext.getPageSize();
+        Integer pageOffset = SystemContext.getPageOffset();
+        //pageOff = pageOff == null || pageOff < 0 ? 0 : pageOff;
+        if(pageOffset == null || pageOffset < 0 ) { pageOffset = 0;}
+        if(pageSize == null || pageSize <0 ) { pageSize = 15; }
+        pages.setOffset(pageOffset);
+        pages.setSize(pageSize);
+        query.setFirstResult(pageOffset).setMaxResults(pageSize);
+    }
+
+    private String getCountHql(String hql){
+        String endSub = hql.substring(hql.indexOf("from"));
+        String countStr = "select count(*) " + endSub;
+        countStr.replace("fetch", "");
+        return countStr;
+
+    }
     /**
      * 基于别名和查询参数的混合列表对象
      *
@@ -166,12 +208,33 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param args
      * @param alias
      */
-    public Pager<T> findst(String hql, Object[] args, Map<String, Object> alias) {
+    @Override
+    public Pager<T> find(String hql, Object[] args, Map<String, Object> alias) {
+        hql = initSort(hql);
+        String cq = getCountHql(hql);
+        cq = initSort(cq);
+        Query cquery = getSession().createQuery(cq);
+        Query query = getSession().createQuery(hql);
+
+        //设置别名参数
+        setAliasParameter(query,alias);
+        setAliasParameter(cquery, alias);
+        //设置量化参数
+        setParameter(query, args);
+        setParameter(cquery, args);
+
+        Pager<T> pages = new Pager<T>();
+        setPager(query, pages);
+        List<T> datas = query.list();
+        pages.setDatas(datas);
+        long total = (long) cquery.uniqueResult();
+        pages.setTotal(total);
         return null;
     }
 
-    public Pager<T> find(String hql, Map<String, Object> alias) {
-        return null;
+    @Override
+    public Pager<T> findByAlias(String hql, Map<String, Object> alias) {
+        return this.find(hql, null ,alias);
     }
 
     /**
@@ -180,14 +243,17 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param hql
      * @param args
      */
+    @Override
     public Object queryObject(String hql, Object[] args) {
         return null;
     }
 
+    @Override
     public Object queryObject(String hql, Object args) {
         return null;
     }
 
+    @Override
     public Object queryObject(String hql) {
         return null;
     }
@@ -198,14 +264,17 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param hql
      * @param args
      */
+    @Override
     public Object updateByHql(String hql, Object[] args) {
         return null;
     }
 
+    @Override
     public Object updateByHql(String hql, Object args) {
         return null;
     }
 
+    @Override
     public Object updateByHql(String hql) {
         return null;
     }
@@ -219,23 +288,28 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param hasEntity 该对象是否是一个hibernate所管理的实体对象，如果不是，需要使用setResultTransform查询
      * @return 一组对象
      */
+    @Override
     public List<T> listBySql(String sql, Object[] args, Class<T> clz, boolean hasEntity) {
         return null;
     }
 
+    @Override
     public List<T> listBySql(String sql, Object args, Class<T> clz, boolean hasEntity) {
         return null;
     }
 
+    @Override
     public List<T> listBySql(String sql, Class<T> clz, boolean hasEntity) {
         return null;
     }
 
+    @Override
     public List<T> listBySql(String sql, Object[] args, Map<String, Object> alias, Class<T> clz, boolean hasEntity) {
         return null;
     }
 
-    public List<T> listBySql(String sql, Map<String, Object> alias, Class<T> clz, boolean hasEntity) {
+    @Override
+    public List<T> listByAliasSql(String sql, Map<String, Object> alias, Class<T> clz, boolean hasEntity) {
         return null;
     }
 
@@ -248,23 +322,28 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param hasEntity 该对象是否是一个hibernate所管理的实体对象，如果不是，需要使用setResultTransform查询
      * @return 一组对象
      */
+    @Override
     public Pager<T> findBySql(String sql, Object[] args, Class<T> clz, boolean hasEntity) {
         return null;
     }
 
+    @Override
     public Pager<T> findBySql(String sql, Object args, Class<T> clz, boolean hasEntity) {
         return null;
     }
 
+    @Override
     public Pager<T> findBySql(String sql, Class<T> clz, boolean hasEntity) {
         return null;
     }
 
+    @Override
     public Pager<T> findBySql(String sql, Object[] args, Map<String, Object> alias, Class<T> clz, boolean hasEntity) {
         return null;
     }
 
-    public Pager<T> findBySql(String sql, Map<String, Object> alias, Class<T> clz, boolean hasEntity) {
+    @Override
+    public Pager<T> findByAliasSql(String sql, Map<String, Object> alias, Class<T> clz, boolean hasEntity) {
         return null;
     }
 }
