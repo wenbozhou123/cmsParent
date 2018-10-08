@@ -1,6 +1,5 @@
 package com.bowen.basic.dao;
 
-import com.bowen.basic.hibernate.BaseDao;
 import com.bowen.basic.model.User;
 import org.springframework.stereotype.Repository;
 

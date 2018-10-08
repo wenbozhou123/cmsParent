@@ -1,4 +1,4 @@
-package com.bowen.basic.hibernate;
+package com.bowen.basic.dao;
 
 
 import com.bowen.basic.model.Pager;
