@@ -7,6 +7,7 @@ import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.dataset.xml.FlatXmlProducer;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.AfterClass;
@@ -29,9 +30,9 @@ public class AbstractDbUnitTestCase {
 
     protected IDataSet createDataSet(String tname) throws DataSetException{
         InputStream is = AbstractDbUnitTestCase.class
-                .getClassLoader().getResourceAsStream(tname + ".xml");
-        Assert.assertNotNull("", is);
-        return new FlatXmlDataSet(new FlatXmlProducer(new InputSource(is)));
+                .getClassLoader().getResourceAsStream("dbunit_xml/"+ tname + ".xml");
+        Assert.assertNotNull("dbunit的基本数据文件不存在", is);
+        return new FlatXmlDataSetBuilder().build(is);
     }
 
     protected  void backupAllTable() throws SQLException, IOException, DataSetException{

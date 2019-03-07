@@ -9,7 +9,7 @@ public class DbUtil {
 
     public static Connection getConnection() throws SQLException{
         Connection con = null ;
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cms_test?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8", "root", "123456");
+        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cms_test?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8", "root", "123456");
         return con;
     }
 

@@ -30,7 +30,7 @@ public class TestUserDao extends AbstractDbUnitTestCase{
 
     @Before
     public void setUp() throws SQLException, IOException, DataSetException {
-        //this.backupAllTable();
+        this.backupAllTable();
     }
 
     @Test
@@ -45,7 +45,7 @@ public class TestUserDao extends AbstractDbUnitTestCase{
 
     @After
     public void tearDown() throws FileNotFoundException, DatabaseUnitException, SQLException {
-        //this.resumeTable();
+        this.resumeTable();
     }
 
 }
