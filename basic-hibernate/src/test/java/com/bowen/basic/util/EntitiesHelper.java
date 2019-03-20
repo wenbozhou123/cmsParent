@@ -5,7 +5,7 @@ import org.junit.Assert;
 
 public class EntitiesHelper {
 
-    private static User baseUser = new User(1, "admin1");
+    private static User baseUser = new User(1, "admin111111");
 
     public static void assertUser(User expected, User actual){
         Assert.assertNotNull(expected);

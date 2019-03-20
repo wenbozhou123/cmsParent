@@ -1,11 +1,15 @@
 package com.bowen.basic.util;
 
+import org.hibernate.SessionFactory;
+
+import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DbUtil {
+
 
     public static Connection getConnection() throws SQLException{
         Connection con = null ;

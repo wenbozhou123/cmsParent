@@ -36,7 +36,7 @@ public class BaseDao<T> implements IBaseDao<T> {
     }
 
     protected Session getSession(){
-        return sessionFactory.openSession();
+        return sessionFactory.getCurrentSession();
     }
 
     /**
@@ -67,7 +67,8 @@ public class BaseDao<T> implements IBaseDao<T> {
      */
     @Override
     public void delete(int id) {
-        getSession().delete(this.load(id));
+        T t = this.load(id);
+        getSession().delete(t);
     }
 
     /**
@@ -77,7 +78,8 @@ public class BaseDao<T> implements IBaseDao<T> {
      */
     @Override
     public T load(int id) {
-        return (T)getSession().load(getClz(),id);
+        T t=(T)getSession().load(getClz(),id);
+        return t;
     }
 
     /**

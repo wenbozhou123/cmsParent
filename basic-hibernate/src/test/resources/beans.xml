@@ -77,11 +77,11 @@
     <tx:advice id="txAdvice" transaction-manager="txManager">
         <tx:attributes>
             <!--让所有方法都加入事务管理，为了提高效率，可以把一些查询之类的方法设置为只读的事物-->
-            <tx:method name="*" propagation="REQUIRED" read-only="true"/>
-            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="*" propagation="REQUIRED"/>
+            <!--<tx:method name="add*" propagation="REQUIRED" />
             <tx:method name="del*" propagation="REQUIRED" />
             <tx:method name="update*" propagation="REQUIRED" />
-            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />-->
         </tx:attributes>
     </tx:advice>
 
