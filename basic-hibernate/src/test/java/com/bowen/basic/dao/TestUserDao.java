@@ -31,9 +31,6 @@ public class TestUserDao extends AbstractDbUnitTestCase{
     @Inject
     private IUserDao userDao;
 
-    @Inject
-    private SessionFactory sessionFactory;
-
     @Before
     public void setUp() throws SQLException, IOException, DataSetException {
         this.backupAllTable();
@@ -49,11 +46,12 @@ public class TestUserDao extends AbstractDbUnitTestCase{
 
     @Test
     public void testDelete() throws DatabaseUnitException, SQLException {
-        IDataSet ds = createDataSet("t_user");
-        DatabaseOperation.CLEAN_INSERT.execute(dbunitCon, ds);
-        userDao.delete(1);
-        User tu= userDao.load(1);
-        System.out.println(tu.getUsername());
+        //IDataSet ds = createDataSet("t_user");
+        //DatabaseOperation.CLEAN_INSERT.execute(dbunitCon, ds);
+        User u =new User(10000,"testName10000");
+        userDao.add(u);
+        //User tu= userDao.load(100);
+        //System.out.println(tu.getUsername());
     }
 
   /*  @Test

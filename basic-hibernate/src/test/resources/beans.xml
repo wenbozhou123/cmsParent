@@ -26,6 +26,7 @@
         <property name="url" value="jdbc:mysql://localhost:3306/cms_test?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=GMT%2B8" />
         <property name="username" value="root" />
         <property name="password" value="123456" />
+        <property name="defaultAutoCommit" value="true"></property>
 
         <!--配置连接池初始值-->
         <property name="initialSize" value="1" />
@@ -63,6 +64,7 @@
     </bean>
 
     <!--配置AOP ,spring是通过AOP来进行事务管理的-->
+    <!-- 配置哪些类的哪些方法使用事务 -->
     <aop:config>
         <!--设置pointCut表示哪些方法要加入事务处理-->
         <!--以下事物时声明在DAO中，但是通常都会在Service来处理多个业务对象逻辑的关系，注入删除，更新等。

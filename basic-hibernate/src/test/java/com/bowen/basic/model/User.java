@@ -22,7 +22,6 @@ public class User {
     }
 
     @Id
-    @GeneratedValue
     public int getId() {
         return id;
     }

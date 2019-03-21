@@ -2,10 +2,7 @@ package com.bowen.basic.dao;
 
 import com.bowen.basic.model.Pager;
 import com.bowen.basic.model.SystemContext;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.transform.Transformers;
 import javax.inject.Inject;
 import java.lang.reflect.ParameterizedType;
@@ -36,7 +33,7 @@ public class BaseDao<T> implements IBaseDao<T> {
     }
 
     protected Session getSession(){
-        return sessionFactory.getCurrentSession();
+        return sessionFactory.getCurrentSession()== null? sessionFactory.openSession() : sessionFactory.getCurrentSession() ;
     }
 
     /**
@@ -46,7 +43,9 @@ public class BaseDao<T> implements IBaseDao<T> {
      */
     @Override
     public T add(T t) {
+        //Transaction transaction= getSession().beginTransaction();
         getSession().save(t);
+        //transaction.commit();
         return t;
     }
 
