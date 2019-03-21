@@ -26,7 +26,6 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/beans.xml")
-@Transactional
 public class TestUserDao extends AbstractDbUnitTestCase{
     @Inject
     private IUserDao userDao;
