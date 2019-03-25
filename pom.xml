@@ -16,9 +16,25 @@
 
     <modules>
         <module>basic-hibernate</module>
+        <module>cms-core</module>
     </modules>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>6.0.13.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wicketstuff</groupId>
+                <artifactId>jsr303</artifactId>
+                <version>1.5-RC5.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bowen.basic</groupId>
+                <artifactId>basic-hibernate</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>

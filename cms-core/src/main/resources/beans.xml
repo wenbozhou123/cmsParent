@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.1.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 打开Spring的Annotation支持-->
+    <context:annotation-config />
+
+    <!--设定Spring去哪些包里面找Annotation-->
+    <context:component-scan base-package="com.bowen.basic" />
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+    destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/cms_test?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=GMT%2B8" />
+        <property name="username" value="root" />
+        <property name="password" value="123456" />
+        <property name="defaultAutoCommit" value="true"></property>
+
+        <!--配置连接池初始值-->
+        <property name="initialSize" value="1" />
+        <!--连接池最大值-->
+        <property name="maxActive" value="100" />
+        <!--最大空闲值，当经过一个高峰之后，连接池可以将一些不用的连接释放掉，一直减少到maxIdle-->
+        <property name="maxIdle" value="20" />
+        <!--最小空闲值，当连接少于minIdle时，会自动申请一些连接-->
+        <property name="minIdle" value="1" />
+        <property name="maxWait" value="1000" />
+    </bean>
+
+    <!--创建Spring的SessionFactory工厂-->
+    <!--和Hibernate4,5  整合没有提供专门针对Annotation的类， 直接在LocalSessionFactoryBean 中已经集成了-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <!--注入数据源-->
+        <property name="dataSource" ref="dataSource" />
+        <!--设置Spring去哪个包中查找相应的实体类-->
+        <property name="packagesToScan" value="com.bowen.basic.model" />
+
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.format_sql">false</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--配置Spring的事务处理-->
+    <!--创建事务管理器-->
+    <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <!--配置AOP ,spring是通过AOP来进行事务管理的-->
+    <!-- 配置哪些类的哪些方法使用事务 -->
+    <aop:config>
+        <!--设置pointCut表示哪些方法要加入事务处理-->
+        <!--以下事物时声明在DAO中，但是通常都会在Service来处理多个业务对象逻辑的关系，注入删除，更新等。
+        此时如果在执行了一个步骤之后抛出异常，就会导致数据不完整，所以事务不应该在DAO层处理，
+        而应该在service，这也就是Spring所提供的一个非常方便的工具，声明式事务-->
+        <aop:pointcut id="allMethods" expression="execution(* com.bowen.basic.dao..*.*(..))" />
+        <!--通过advisor来确定具体要加入事务控制的方法-->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="allMethods" />
+    </aop:config>
+
+    <!--配置事务传播特性，哪些方法要加入事务控制-->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <!--让所有方法都加入事务管理，为了提高效率，可以把一些查询之类的方法设置为只读的事物-->
+            <tx:method name="*" propagation="REQUIRED"/>
+            <!--<tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="del*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />-->
+        </tx:attributes>
+    </tx:advice>
+
+
+</beans>
