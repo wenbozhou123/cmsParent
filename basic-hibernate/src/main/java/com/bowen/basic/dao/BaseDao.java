@@ -6,6 +6,7 @@ import org.hibernate.*;
 import org.hibernate.transform.Transformers;
 import javax.inject.Inject;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigInteger;
 import java.util.*;
 
 public class BaseDao<T> implements IBaseDao<T> {
@@ -386,7 +387,7 @@ public class BaseDao<T> implements IBaseDao<T> {
         }
         List<N> datas = sqlQuery.list();
         pages.setDatas(datas);
-        long total = (long) cquery.uniqueResult();
+        BigInteger total = (BigInteger) cquery.uniqueResult();
         pages.setTotal(total);
         return pages;
     }

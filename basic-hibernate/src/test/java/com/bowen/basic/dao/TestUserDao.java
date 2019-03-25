@@ -106,7 +106,7 @@ public class TestUserDao extends AbstractDbUnitTestCase{
         Pager<User> expected = userDao.find("from User where id>=? and id <=?", new Object[]{1,10});
         List<User> actual = Arrays.asList(new User(10,"admin10"), new User(9,"admin9"), new User(8,"admin8"));
         assertNotNull(expected);
-        assertTrue(expected.getTotal() == 10);
+        assertTrue(expected.getTotal().intValue() == 10);
         assertTrue(expected.getOffset() == 0);
         assertTrue(expected.getSize() == 3);
         EntitiesHelper.assertUsers(expected.getDatas(), actual);
@@ -116,6 +116,8 @@ public class TestUserDao extends AbstractDbUnitTestCase{
     public void testFindByArgsAndAlias() throws DatabaseUnitException, SQLException {
         IDataSet ds = createDataSet("t_user");
         DatabaseOperation.CLEAN_INSERT.execute(dbunitCon ,ds);
+        SystemContext.setOrder("asc");
+        SystemContext.setSort("id");
         SystemContext.setPageSize(3);
         SystemContext.setPageOffset(0);
         Map<String, Object> alias = new HashedMap();
@@ -123,7 +125,7 @@ public class TestUserDao extends AbstractDbUnitTestCase{
         Pager<User> expected = userDao.find("from User where id>=? and id <=? and id in (:ids)", new Object[]{1,10}, alias);
         List<User> actual = Arrays.asList(new User(1,"admin1"), new User(2,"admin2"), new User(4,"admin4"));
         assertNotNull(expected);
-        assertTrue(expected.getTotal() == 8);
+        assertTrue(expected.getTotal().intValue() == 8);
         assertTrue(expected.getOffset() == 0);
         assertTrue(expected.getSize() == 3);
         EntitiesHelper.assertUsers(expected.getDatas(), actual);
@@ -146,14 +148,48 @@ public class TestUserDao extends AbstractDbUnitTestCase{
     public void testListSQLByArgsAndAlias() throws DatabaseUnitException, SQLException {
         IDataSet ds = createDataSet("t_user");
         DatabaseOperation.CLEAN_INSERT.execute(dbunitCon ,ds);
+        SystemContext.setOrder("desc");
+        SystemContext.setSort("id");
+        Map<String, Object> alias = new HashedMap();
+        alias.put("ids", Arrays.asList(1,2,3,5,6,7,8,10));
+        List<User> expected = userDao.listBySql("select * from t_user where id>? and id <? and id in (:ids)", new Object[]{1,4},alias, User.class, true);
+        List<User> actual = Arrays.asList(new User(3,"admin3"), new User(2,"admin2"));
+        assertNotNull(expected);
+        assertTrue(expected.size() == 2);
+        EntitiesHelper.assertUsers(expected, actual);
+    }
+
+    @Test
+    public void testFindSQLByArgs() throws DatabaseUnitException, SQLException {
+        IDataSet ds = createDataSet("t_user");
+        DatabaseOperation.CLEAN_INSERT.execute(dbunitCon ,ds);
+        SystemContext.setOrder("desc");
+        SystemContext.setSort("id");
+        SystemContext.setPageSize(3);
+        SystemContext.setPageOffset(0);
+        Pager<User> expected = userDao.findBySql("select * from t_user where id>=? and id <=? ", new Object[]{1,10}, User.class, true);
+        List<User> actual = Arrays.asList(new User(10,"admin10"), new User(9,"admin9"), new User(8,"admin8"));
+        assertNotNull(expected);
+        assertTrue(expected.getTotal().intValue() == 10);
+        assertTrue(expected.getOffset() == 0);
+        assertTrue(expected.getSize() == 3);
+        EntitiesHelper.assertUsers(expected.getDatas(), actual);
+    }
+
+    @Test
+    public void testFindSQLByArgsAndAlias() throws DatabaseUnitException, SQLException {
+        IDataSet ds = createDataSet("t_user");
+        DatabaseOperation.CLEAN_INSERT.execute(dbunitCon ,ds);
+        SystemContext.setOrder("asc");
+        SystemContext.setSort("id");
         SystemContext.setPageSize(3);
         SystemContext.setPageOffset(0);
         Map<String, Object> alias = new HashedMap();
         alias.put("ids", Arrays.asList(1,2,4,5,6,7,8,10));
-        Pager<User> expected = userDao.find("from User where id>=? and id <=? and id in (:ids)", new Object[]{1,10}, alias);
+        Pager<User> expected = userDao.findBySql("select * from t_user where id>=? and id <=? and id in(:ids)", new Object[]{1,10},alias,  User.class, true);
         List<User> actual = Arrays.asList(new User(1,"admin1"), new User(2,"admin2"), new User(4,"admin4"));
         assertNotNull(expected);
-        assertTrue(expected.getTotal() == 8);
+        assertTrue(expected.getTotal().intValue() == 8);
         assertTrue(expected.getOffset() == 0);
         assertTrue(expected.getSize() == 3);
         EntitiesHelper.assertUsers(expected.getDatas(), actual);
