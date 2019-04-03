@@ -18,6 +18,16 @@ public class Role {
     /**角色编号，枚举类型*/
     private RoleType roleType;
 
+    public Role(){
+
+    }
+
+    public Role(int id, String name, RoleType roleType) {
+        this.id = id;
+        this.name = name;
+        this.roleType = roleType;
+    }
+
     @Id
     public int getId() {
         return id;
@@ -36,6 +46,7 @@ public class Role {
     }
 
     @Enumerated(EnumType.ORDINAL)
+    @Column(name = "role_type")
     public RoleType getRoleType() {
         return roleType;
     }
