@@ -1,6 +1,7 @@
 package com.bowen.cms.dao;
 
 import com.bowen.basic.dao.BaseDao;
+import com.bowen.basic.model.Pager;
 import com.bowen.cms.model.*;
 import org.springframework.stereotype.Repository;
 
@@ -60,7 +61,7 @@ public class UserDao extends BaseDao<User> implements IUserDao {
      */
     @Override
     public UserRole loadUserRole(int userId, int roleId) {
-        String hql = "select ur from UserRole ur where ur.user.id = ? and ur.role.id = ?";
+        String hql = "select ur from UserRole ur left join fetch ur.user u left join fetch ur.role r where u.id = ? and r.id = ?";
         return (UserRole)this.getSession().createQuery(hql).setParameter(0, userId).setParameter(1, roleId).uniqueResult();
     }
 
@@ -72,7 +73,7 @@ public class UserDao extends BaseDao<User> implements IUserDao {
      */
     @Override
     public UserGroup loadUserGroup(int userId, int groupId) {
-        String hql = "select ug from UserGroup ug where ug.user.id = ? and ug.group.id = ?";
+        String hql = "select ug from UserGroup ug left join fetch ug.user u left join fetch ug.group g where u.id = ? and g.id = ?";
         return (UserGroup)this.getSession().createQuery(hql).setParameter(0, userId).setParameter(1, groupId).uniqueResult();
     }
 
@@ -118,5 +119,76 @@ public class UserDao extends BaseDao<User> implements IUserDao {
     public List<User> listGroupUsers(int groupId) {
         String hql = "select ug.user from UserGroup ug where ug.group.id = ?";
         return this.list(hql, groupId);
+    }
+
+    /**
+     * 添加用户角色对象
+     *
+     * @param user
+     * @param role
+     */
+    @Override
+    public void addUserRole(User user, Role role) {
+        UserRole ur = this.loadUserRole(user.getId(), role.getId());
+        if (ur != null) return;
+        ur = new UserRole();
+        ur.setUser(user);
+        ur.setRole(role);
+        this.getSession().save(ur);
+    }
+
+    /**
+     * 添加用户组对象
+     *
+     * @param user
+     * @param group
+     */
+    @Override
+    public void addUserGroup(User user, Group group) {
+        UserGroup ug = this.loadUserGroup(user.getId(), group.getId());
+        if (ug != null) return ;
+        ug = new UserGroup();
+        ug.setUser(user);
+        ug.setGroup(group);
+        this.getSession().save(ug);
+    }
+
+    /**
+     * 删除用户角色
+     *
+     * @param uid
+     */
+    @Override
+    public void deleteUserRoles(int uid) {
+        String hql = "delete UserRole ur where ur.user.id = ?";
+        this.updateByHql(hql, uid);
+    }
+
+    /**
+     * 删除用户组
+     *
+     * @param uid
+     */
+    @Override
+    public void deleteUserGroups(int uid) {
+        String hql = "delete UserGroup ug where ur.user.id = ?";
+        this.updateByHql(hql, uid);
+    }
+
+    @Override
+    public Pager<User> findUser() {
+         return this.find("from User");
+    }
+
+    @Override
+    public void deleteUserRole(int uid, int rid) {
+        String hql= "delete UserRole ur where ur.user.id = ? and ur.role.id = ?";
+        this.updateByHql(hql, new Object[]{uid, rid});
+    }
+
+    @Override
+    public void deleteUserGroup(int uid, int gid) {
+        String hql= "delete UserGroup ug where ug.user.id = ? and ug.group.id = ?";
+        this.updateByHql(hql, new Object[]{uid, gid});
     }
 }

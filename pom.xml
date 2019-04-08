@@ -17,9 +17,21 @@
     <modules>
         <module>basic-hibernate</module>
         <module>cms-core</module>
+        <module>cms-user</module>
     </modules>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymock</artifactId>
+                <version>3.4</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
+            </dependency>
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
@@ -38,6 +50,11 @@
             <dependency>
                 <groupId>com.bowen.basic</groupId>
                 <artifactId>basic-hibernate</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bowen</groupId>
+                <artifactId>cms-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

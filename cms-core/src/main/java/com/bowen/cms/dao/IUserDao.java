@@ -1,6 +1,7 @@
 package com.bowen.cms.dao;
 
 import com.bowen.basic.dao.IBaseDao;
+import com.bowen.basic.model.Pager;
 import com.bowen.cms.model.*;
 
 import java.util.List;
@@ -42,4 +43,22 @@ public interface IUserDao extends IBaseDao<User >{
 
     /**获取某个组的用户对象 */
     public List<User> listGroupUsers(int groupId);
+
+    /**添加用户角色对象*/
+    public void addUserRole(User user, Role role);
+
+    /**添加用户组对象*/
+    public void addUserGroup(User user, Group group);
+
+    /**删除用户角色*/
+    public void deleteUserRoles(int uid);
+
+    /**删除用户组*/
+    public void deleteUserGroups(int uid);
+
+    public Pager<User> findUser();
+
+    public void deleteUserRole(int uid, int rid);
+
+    public void deleteUserGroup(int uid, int gid);
 }
