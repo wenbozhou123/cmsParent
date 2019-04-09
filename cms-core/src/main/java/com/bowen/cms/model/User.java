@@ -55,6 +55,10 @@ public class User {
         this.status = status;
     }
 
+    public User() {
+
+    }
+
     @Id
     public int getId() {
         return id;

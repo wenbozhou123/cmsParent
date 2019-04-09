@@ -14,6 +14,16 @@ public class UserRole {
     private User user;
     private Role role;
 
+    public UserRole(){
+
+    }
+
+    public UserRole(int id, User user, Role role) {
+        this.id = id;
+        this.user = user;
+        this.role = role;
+    }
+
     @Id
     public int getId() {
         return id;

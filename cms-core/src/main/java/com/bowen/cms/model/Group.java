@@ -19,6 +19,16 @@ public class Group {
     /**组描述*/
     private String des;
 
+    public Group(){
+
+    }
+
+    public Group(int id, String name, String des) {
+        this.id = id;
+        this.name = name;
+        this.des = des;
+    }
+
     @Id
     public int getId() {
         return id;

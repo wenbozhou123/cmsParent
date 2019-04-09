@@ -1,8 +1,7 @@
 package dao;
 
 import com.bowen.cms.dao.IUserDao;
-import com.bowen.cms.model.Role;
-import com.bowen.cms.model.RoleType;
+import com.bowen.cms.model.*;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
@@ -39,21 +38,46 @@ public class TestUserDao extends AbstractDbUnitTestCase {
     private SessionFactory sessionFactory;
 
     @Before
-    public void setUp() throws SQLException, IOException, DataSetException {
+    public void setUp() throws SQLException, IOException, DatabaseUnitException {
         Session s = sessionFactory.openSession();
         TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(s));
         this.backupAllTable();
+        IDataSet ds = createDataSet("t_user");
+        DatabaseOperation.CLEAN_INSERT.execute(dbunitCon, ds);
     }
 
     @Test
-    public void testListUserRoles() throws DatabaseUnitException, SQLException {
-        IDataSet ds = createDataSet("t_user");
-        DatabaseOperation.CLEAN_INSERT.execute(dbunitCon, ds);
+    public void testListUserRoles() {
         List<Role> actuals = Arrays.asList(new Role(2, "文章发布人员",RoleType.ROLE_PUBLISH), new Role(3, "文章审核人员", RoleType.ROLE_AUDIT));
         List<Role> roles = userDao.listUserRoles(2);
         EntitiesHelper.assertRole(roles, actuals);
     }
 
+    @Test
+    public void testListUserRoleIds() {
+        List<Role> actuals = Arrays.asList(new Role(2, "文章发布人员",RoleType.ROLE_PUBLISH), new Role(3, "文章审核人员", RoleType.ROLE_AUDIT));
+        List<Integer> roleIds = userDao.listUserRoleIds(2);
+        EntitiesHelper.assertRoleIds(roleIds, actuals);
+    }
+
+    @Test
+    public void testListUserGroup() {
+        List<Group> actuals = Arrays.asList(new Group(1, "财务科","负责财务部门的网页"), new Group(3, "宣传部", "负责宣传部门的网页"));
+        List<Group> expected = userDao.listUserGroup(2);
+        EntitiesHelper.assertGroup(expected, actuals);
+    }
+
+    @Test
+    public void testListUserGroupIds() {
+        List<Group> actuals = Arrays.asList(new Group(1, "财务科","负责财务部门的网页"), new Group(3, "宣传部", "负责宣传部门的网页"));
+        List<Integer> expected = userDao.listUserGroupIds(2);
+        EntitiesHelper.assertGroupIds(expected, actuals);
+    }
+
+    @Test
+    public void testLoadUserRole() {
+        UserRole ur = new UserRole(3, new User(), new Role());
+    }
 
     @After
     public void tearDown() throws FileNotFoundException, DatabaseUnitException, SQLException {

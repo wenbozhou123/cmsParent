@@ -1,5 +1,6 @@
 package util;
 
+import com.bowen.cms.model.Group;
 import com.bowen.cms.model.Role;
 import com.bowen.cms.model.RoleType;
 import com.bowen.cms.model.User;
@@ -21,11 +22,42 @@ public class EntitiesHelper {
         Assert.assertEquals(expected.getRoleType(), actual.getRoleType());
     }
 
+    public static void assertGroup(Group expected, Group actual){
+        Assert.assertNotNull(expected);
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getName(), actual.getName());
+        Assert.assertEquals(expected.getDes(), actual.getDes());
+    }
+
     public static void assertRole(List<Role> expected, List<Role> actual){
         for (int i =0; i< expected.size(); i++){
             Role eu = expected.get(i);
             Role au = actual.get(i);
             assertRole(eu, au);
+        }
+    }
+
+    public static void assertGroup(List<Group> expected, List<Group> actual){
+        for (int i =0; i< expected.size(); i++){
+            Group eu = expected.get(i);
+            Group au = actual.get(i);
+            assertGroup(eu, au);
+        }
+    }
+
+    public static void assertRoleIds(List<Integer> expectedIds, List<Role> actual){
+        for (int i =0; i< expectedIds.size(); i++){
+            Integer euId = expectedIds.get(i);
+            Role au = actual.get(i);
+            Assert.assertEquals((int)euId, au.getId());
+        }
+    }
+
+    public static void assertGroupIds(List<Integer> expectedIds, List<Group> actual){
+        for (int i =0; i< expectedIds.size(); i++){
+            Integer euId = expectedIds.get(i);
+            Group au = actual.get(i);
+            Assert.assertEquals((int)euId, au.getId());
         }
     }
 
