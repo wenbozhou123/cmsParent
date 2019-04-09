@@ -7,7 +7,7 @@
     <t_user id="3" username="admin3"
             password="123" nickname="admin3" email="admin3@admin.com" status="1" phone="110" create_date="2019-04-30"/>
 
-    <t_group id="1" name="财务处" des="负责财务部门的网页"/>
+    <t_group id="1" name="财务科" des="负责财务部门的网页"/>
     <t_group id="2" name="计科系" des="负责计科系的网页"/>
     <t_group id="3" name="宣传部" des="负责宣传部门的网页"/>
 

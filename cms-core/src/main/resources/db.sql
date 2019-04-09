@@ -1,5 +1,7 @@
---创建数据库
-create database fuzhong_cms;
+-- 创建数据库时,设置数据库的编码方式
+-- CHARACTER SET:指定数据库采用的字符集,utf8不能写成utf-8
+-- COLLATE:指定数据库字符集的排序规则,utf8的默认排序规则为utf8_general_ci（通过show character set查看）
+create database fuzhong_cms CHARACTER SET utf8 COLLATE utf8_general_ci;
 --创建User
 CREATE USER 'fz'@'%' identified by 'fz123456';
 --'%' - 所有情况都能访问

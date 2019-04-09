@@ -89,17 +89,15 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param args 查询参数
      * @return 一组不分页的对象
      */
-    @Override
+
     public List<T> list(String hql, Object[] args) {
         return this.list(hql,args,null);
     }
 
-    @Override
     public List<T> list(String hql, Object arg) {
         return this.list(hql, new Object[]{arg});
     }
 
-    @Override
     public List<T> list(String hql) {
         return this.list(hql,null);
     }
@@ -149,7 +147,6 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param args
      * @param alias
      */
-    @Override
     public List<T> list(String hql, Object[] args, Map<String, Object> alias) {
         hql = initSort(hql);
         Query query = getSession().createQuery(hql);
@@ -158,7 +155,6 @@ public class BaseDao<T> implements IBaseDao<T> {
         return query.list();
     }
 
-    @Override
     public List<T> listByAlias(String hql, Map<String, Object> alias) {
         return this.list(hql,null,alias);
     }
@@ -170,17 +166,14 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param args 查询参数
      * @return 一组不分页的对象
      */
-    @Override
     public Pager<T> find(String hql, Object[] args) {
         return this.find(hql ,args, null);
     }
 
-    @Override
     public Pager<T> find(String hql, Object arg) {
         return this.find(hql, new Object[]{arg});
     }
 
-    @Override
     public Pager<T> find(String hql) {
         return this.find(hql, null);
     }
@@ -213,7 +206,6 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param args
      * @param alias
      */
-    @Override
     public Pager<T> find(String hql, Object[] args, Map<String, Object> alias) {
         hql = initSort(hql);
         String cq = getCountHql(hql, true);
@@ -237,7 +229,6 @@ public class BaseDao<T> implements IBaseDao<T> {
         return pages;
     }
 
-    @Override
     public Pager<T> findByAlias(String hql, Map<String, Object> alias) {
         return this.find(hql, null ,alias);
     }
@@ -248,22 +239,19 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param hql
      * @param args
      */
-    @Override
+
     public Object queryObject(String hql, Object[] args) {
         return this.queryObject(hql, args, null);
     }
 
-    @Override
     public Object queryObject(String hql, Object arg) {
         return this.queryObject(hql, new Object[]{arg});
     }
 
-    @Override
     public Object queryObject(String hql) {
         return this.queryObject(hql, null);
     }
 
-    @Override
     public Object queryObject(String hql, Object[] args, Map<String, Object> alias){
         Query query = getSession().createQuery(hql);
         setAliasParameter(query, alias);
@@ -271,7 +259,6 @@ public class BaseDao<T> implements IBaseDao<T> {
         return query.uniqueResult();
     }
 
-    @Override
     public Object queryObjectByAlias(String hql, Map<String, Object> alias){
         return this.queryObject(hql,null, alias);
     }
@@ -282,19 +269,16 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param hql
      * @param args
      */
-    @Override
     public Object updateByHql(String hql, Object[] args) {
         Query query = getSession().createQuery(hql);
         setParameter(query, args);
         return query.executeUpdate();
     }
 
-    @Override
     public Object updateByHql(String hql, Object arg) {
         return this.updateByHql(hql, new Object[]{arg});
     }
 
-    @Override
     public Object updateByHql(String hql) {
         return this.updateByHql(hql, null);
     }
@@ -308,22 +292,18 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param hasEntity 该对象是否是一个hibernate所管理的实体对象，如果不是，需要使用setResultTransform查询
      * @return 一组对象
      */
-    @Override
     public <N extends Object>List<N> listBySql(String sql, Object[] args, Class<? extends Object> clz, boolean hasEntity) {
         return this.listBySql(sql, args, null, clz, hasEntity);
     }
 
-    @Override
     public <N extends Object>List<N> listBySql(String sql, Object arg, Class<? extends Object> clz, boolean hasEntity) {
         return this.listBySql(sql, new Object[]{arg}, clz, hasEntity);
     }
 
-    @Override
     public <N extends Object>List<N> listBySql(String sql, Class<? extends Object> clz, boolean hasEntity) {
         return this.listBySql(sql, null,clz, hasEntity);
     }
 
-    @Override
     public <N extends Object>List<N> listBySql(String sql, Object[] args, Map<String, Object> alias, Class<? extends Object> clz, boolean hasEntity) {
         sql = initSort(sql);
         SQLQuery sqlQuery = getSession().createSQLQuery(sql);
@@ -337,7 +317,6 @@ public class BaseDao<T> implements IBaseDao<T> {
         return sqlQuery.list();
     }
 
-    @Override
     public <N extends Object>List<N> listByAliasSql(String sql, Map<String, Object> alias, Class<? extends Object> clz, boolean hasEntity) {
         return this.listBySql(sql, null, alias, clz, hasEntity);
     }
@@ -351,22 +330,18 @@ public class BaseDao<T> implements IBaseDao<T> {
      * @param hasEntity 该对象是否是一个hibernate所管理的实体对象，如果不是，需要使用setResultTransform查询
      * @return 一组对象
      */
-    @Override
     public <N extends Object>Pager<N> findBySql(String sql, Object[] args, Class<? extends Object> clz, boolean hasEntity) {
         return this.findBySql(sql, args, null, clz, hasEntity);
     }
 
-    @Override
     public <N extends Object>Pager<N> findBySql(String sql, Object arg, Class<? extends Object> clz, boolean hasEntity) {
         return this.findBySql(sql,new Object[]{arg}, clz, hasEntity);
     }
 
-    @Override
     public <N extends Object>Pager<N> findBySql(String sql, Class<? extends Object> clz, boolean hasEntity) {
         return this.findBySql(sql, null, clz, hasEntity);
     }
 
-    @Override
     public <N extends Object>Pager<N> findBySql(String sql, Object[] args, Map<String, Object> alias, Class<? extends Object> clz, boolean hasEntity) {
         String cq = getCountHql(sql ,false);
         cq = initSort(cq);
@@ -392,7 +367,6 @@ public class BaseDao<T> implements IBaseDao<T> {
         return pages;
     }
 
-    @Override
     public <N extends Object>Pager<N> findByAliasSql(String sql, Map<String, Object> alias, Class<? extends Object> clz, boolean hasEntity) {
         return this.findBySql(sql,null, alias ,clz, hasEntity);
     }
