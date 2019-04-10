@@ -1,9 +1,7 @@
 package com.bowen.cms.service;
 
 import com.bowen.basic.model.Pager;
-import com.bowen.cms.dao.GroupDao;
-import com.bowen.cms.dao.RoleDao;
-import com.bowen.cms.dao.UserDao;
+import com.bowen.cms.dao.*;
 import com.bowen.cms.exception.CmsException;
 import com.bowen.cms.model.Group;
 import com.bowen.cms.model.Role;
@@ -18,37 +16,38 @@ import java.util.List;
 public class UserService implements IUserService {
 
 
-    private UserDao userDao;
-    private RoleDao roleDao;
-    private GroupDao groupDao;
+    private IUserDao userDao;
+    private IRoleDao roleDao;
+    private IGroupDao groupDao;
 
-    public UserDao getUserDao() {
+    public IUserDao getUserDao() {
         return userDao;
     }
 
     @Inject
-    public void setUserDao(UserDao userDao) {
+    public void setUserDao(IUserDao userDao) {
         this.userDao = userDao;
     }
 
-    public RoleDao getRoleDao() {
+    public IRoleDao getRoleDao() {
         return roleDao;
     }
 
     @Inject
-    public void setRoleDao(RoleDao roleDao) {
+    public void setRoleDao(IRoleDao roleDao) {
         this.roleDao = roleDao;
     }
 
-    public GroupDao getGroupDao() {
+    public IGroupDao getGroupDao() {
         return groupDao;
     }
 
     @Inject
-    public void setGroupDao(GroupDao groupDao) {
+    public void setGroupDao(IGroupDao groupDao) {
         this.groupDao = groupDao;
     }
-    private void addUserRole(User user, Integer rid){
+
+    private void  addUserRole(User user, Integer rid){
         //检查角色对象是否存在，如不存在，就刨出异常
         Role role = roleDao.load(rid);
         if (role == null) throw new CmsException("要添加的用户角色不存在");

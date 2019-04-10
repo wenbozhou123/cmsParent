@@ -1,6 +1,7 @@
 package com.bowen.cms.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -30,6 +31,7 @@ public class Group {
     }
 
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }

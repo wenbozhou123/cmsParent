@@ -132,7 +132,7 @@ public class TestUserDao extends AbstractDbUnitTestCase {
         UserRole actual = new UserRole(5, new User(1,"admin1","123", "admin1", "admin1@admin.com", "110", 1),
                 new Role(3, "文章审核人员", RoleType.ROLE_AUDIT));
 
-        userDao.addUserRole(5, actual.getUser(), actual.getRole());
+        userDao.addUserRole(actual.getUser(), actual.getRole());
 
         //UserRole expected = userDao.loadUserRole(1,3);
         //String ll = expected.getRole().getName();
@@ -143,6 +143,7 @@ public class TestUserDao extends AbstractDbUnitTestCase {
 
     @Test
     public void testAddUserGroup() {
+        long kk=System.currentTimeMillis();
 
     }
 

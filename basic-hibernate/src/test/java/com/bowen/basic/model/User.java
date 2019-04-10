@@ -1,6 +1,8 @@
 package com.bowen.basic.model;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -22,6 +24,7 @@ public class User {
     }
 
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }

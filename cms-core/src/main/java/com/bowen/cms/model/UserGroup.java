@@ -25,6 +25,7 @@ public class UserGroup {
     }
 
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }

@@ -128,11 +128,10 @@ public class UserDao extends BaseDao<User> implements IUserDao {
      * @param role
      */
     @Override
-    public void addUserRole(int urId, User user, Role role) {
+    public void addUserRole(User user, Role role) {
         UserRole ur = this.loadUserRole(user.getId(), role.getId());
         if (ur != null) return;
         ur = new UserRole();
-        ur.setId(urId);
         ur.setUser(user);
         ur.setRole(role);
         this.getSession().save(ur);
@@ -145,11 +144,10 @@ public class UserDao extends BaseDao<User> implements IUserDao {
      * @param group
      */
     @Override
-    public void addUserGroup(int ugId,User user, Group group) {
+    public void addUserGroup(User user, Group group) {
         UserGroup ug = this.loadUserGroup(user.getId(), group.getId());
         if (ug != null) return ;
         ug = new UserGroup();
-        ug.setId(ugId);
         ug.setUser(user);
         ug.setGroup(group);
         this.getSession().save(ug);

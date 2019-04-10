@@ -25,6 +25,7 @@ public class UserRole {
     }
 
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }

@@ -29,6 +29,7 @@ public class Role {
     }
 
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
