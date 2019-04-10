@@ -14,6 +14,16 @@ public class UserGroup {
     private User user;
     private Group group;
 
+    public UserGroup(){
+
+    }
+
+    public UserGroup(int id, User user, Group group) {
+        this.id = id;
+        this.user = user;
+        this.group = group;
+    }
+
     @Id
     public int getId() {
         return id;

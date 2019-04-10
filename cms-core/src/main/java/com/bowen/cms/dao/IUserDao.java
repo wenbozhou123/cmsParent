@@ -45,10 +45,10 @@ public interface IUserDao extends IBaseDao<User >{
     public List<User> listGroupUsers(int groupId);
 
     /**添加用户角色对象*/
-    public void addUserRole(User user, Role role);
+    public void addUserRole(int urId, User user, Role role);
 
     /**添加用户组对象*/
-    public void addUserGroup(User user, Group group);
+    public void addUserGroup(int ugId, User user, Group group);
 
     /**删除用户角色*/
     public void deleteUserRoles(int uid);

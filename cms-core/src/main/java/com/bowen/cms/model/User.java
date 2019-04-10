@@ -59,6 +59,17 @@ public class User {
 
     }
 
+    public User(int id, String username, String password, String nickname, String email, String phone, int status, Date createDate) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.email = email;
+        this.phone = phone;
+        this.status = status;
+        this.createDate = createDate;
+    }
+
     @Id
     public int getId() {
         return id;

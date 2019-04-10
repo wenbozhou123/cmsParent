@@ -1,9 +1,6 @@
 package util;
 
-import com.bowen.cms.model.Group;
-import com.bowen.cms.model.Role;
-import com.bowen.cms.model.RoleType;
-import com.bowen.cms.model.User;
+import com.bowen.cms.model.*;
 import org.junit.Assert;
 
 import java.util.List;
@@ -27,6 +24,22 @@ public class EntitiesHelper {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getName(), actual.getName());
         Assert.assertEquals(expected.getDes(), actual.getDes());
+    }
+
+    public static void assertUserRole(UserRole expected, UserRole actual){
+        Assert.assertNotNull(expected);
+        Assert.assertEquals(expected.getId(), actual.getId());
+        assertUser(expected.getUser(), actual.getUser());
+        assertRole(expected.getRole(), actual.getRole());
+
+    }
+
+    public static void assertUserGroup(UserGroup expected, UserGroup actual){
+        Assert.assertNotNull(expected);
+        Assert.assertEquals(expected.getId(), actual.getId());
+        assertUser(expected.getUser(), actual.getUser());
+        assertGroup(expected.getGroup(), actual.getGroup());
+
     }
 
     public static void assertRole(List<Role> expected, List<Role> actual){

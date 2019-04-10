@@ -76,7 +76,68 @@ public class TestUserDao extends AbstractDbUnitTestCase {
 
     @Test
     public void testLoadUserRole() {
-        UserRole ur = new UserRole(3, new User(), new Role());
+        UserRole actual = new UserRole(3, new User(2,"admin2","123", "admin2", "admin2@admin.com", "110", 1),
+                         new Role(3, "文章审核人员", RoleType.ROLE_AUDIT));
+        UserRole expected = userDao.loadUserRole(2, 3);
+        EntitiesHelper.assertUserRole(expected, actual);
+
+    }
+
+    @Test
+    public void testLoadUserGroup() {
+        UserGroup actual = new UserGroup(1, new User(2,"admin2","123", "admin2", "admin2@admin.com", "110", 1),
+                new Group(1, "财务科", "负责财务部门的网页"));
+        UserGroup expected = userDao.loadUserGroup(2, 1);
+        EntitiesHelper.assertUserGroup(expected, actual);
+
+    }
+
+    @Test
+    public void testLoadByUsername() {
+        User actual = new User(2,"admin2","123", "admin2", "admin2@admin.com", "110", 1);
+        User expected = userDao.loadByUsername("admin2");
+        EntitiesHelper.assertUser(expected, actual);
+
+    }
+
+    @Test
+    public void testListRoleUsers() {
+        List<User> actual = Arrays.asList(new User(2,"admin2","123", "admin2", "admin2@admin.com", "110", 1),
+                new User(3,"admin3","123", "admin3", "admin3@admin.com", "110", 1));
+        List<User> expected = userDao.listRoleUsers(2);
+        EntitiesHelper.assertUsers(expected, actual);
+
+    }
+
+    @Test
+    public void testListRoleUsersByType() {
+        List<User> actual = Arrays.asList(new User(2,"admin2","123", "admin2", "admin2@admin.com", "110", 1),
+                new User(3,"admin3","123", "admin3", "admin3@admin.com", "110", 1));
+        List<User> expected = userDao.listRoleUsers(RoleType.ROLE_PUBLISH);
+        EntitiesHelper.assertUsers(expected, actual);
+
+    }
+
+    @Test
+    public void testListGroupUsers() {
+        List<User> actual = Arrays.asList(new User(2,"admin2","123", "admin2", "admin2@admin.com", "110", 1),
+                new User(3,"admin3","123", "admin3", "admin3@admin.com", "110", 1));
+        List<User> expected = userDao.listGroupUsers(1);
+        EntitiesHelper.assertUsers(expected, actual);
+
+    }
+
+    @Test
+    public void testAddUserRole() {
+        UserRole actual = new UserRole(5, new User(1,"admin1","123", "admin1", "admin1@admin.com", "110", 1),
+                new Role(3, "文章审核人员", RoleType.ROLE_AUDIT));
+
+        userDao.addUserRole(5,actual.getUser(), actual.getRole());
+
+        UserRole expected = userDao.loadUserRole(1,3);
+
+        //EntitiesHelper.assertUserRole(expected,actual);
+
     }
 
     @After
@@ -85,7 +146,7 @@ public class TestUserDao extends AbstractDbUnitTestCase {
         Session s = sessionHolder.getSession();
         s.flush();
         TransactionSynchronizationManager.unbindResource(sessionFactory);
-        this.resumeTable();
+        //this.resumeTable();
     }
 
 }
