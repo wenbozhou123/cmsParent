@@ -53,6 +53,16 @@ public class TestUserDao extends AbstractDbUnitTestCase{
     }
 
     @Test
+    public void testAdd() throws DatabaseUnitException, SQLException {
+        IDataSet ds = createDataSet("t_user");
+        DatabaseOperation.CLEAN_INSERT.execute(dbunitCon ,ds);
+        User actual = new User(21, "admin21");
+        userDao.add(actual);
+        User expected = userDao.load(21);
+        EntitiesHelper.assertUser(expected, actual);
+    }
+
+    @Test
     public void testLoad() throws DatabaseUnitException, SQLException {
         IDataSet ds = createDataSet("t_user");
         DatabaseOperation.CLEAN_INSERT.execute(dbunitCon ,ds);

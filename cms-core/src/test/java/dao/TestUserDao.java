@@ -132,11 +132,23 @@ public class TestUserDao extends AbstractDbUnitTestCase {
         UserRole actual = new UserRole(5, new User(1,"admin1","123", "admin1", "admin1@admin.com", "110", 1),
                 new Role(3, "文章审核人员", RoleType.ROLE_AUDIT));
 
-        userDao.addUserRole(5,actual.getUser(), actual.getRole());
+        userDao.addUserRole(5, actual.getUser(), actual.getRole());
 
-        UserRole expected = userDao.loadUserRole(1,3);
+        //UserRole expected = userDao.loadUserRole(1,3);
+        //String ll = expected.getRole().getName();
 
         //EntitiesHelper.assertUserRole(expected,actual);
+
+    }
+
+    @Test
+    public void testAddUserGroup() {
+
+    }
+
+    @Test
+    public void testDeleteUserRoles() {
+
 
     }
 
@@ -146,7 +158,7 @@ public class TestUserDao extends AbstractDbUnitTestCase {
         Session s = sessionHolder.getSession();
         s.flush();
         TransactionSynchronizationManager.unbindResource(sessionFactory);
-        //this.resumeTable();
+        this.resumeTable();
     }
 
 }

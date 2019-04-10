@@ -14,7 +14,4 @@ public interface IBaseDao<T> {
     /**根据ID加载对象*/
     public T load(int id);
 
-
-
-
 }
