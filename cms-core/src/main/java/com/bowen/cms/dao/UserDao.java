@@ -62,6 +62,7 @@ public class UserDao extends BaseDao<User> implements IUserDao {
     @Override
     public UserRole loadUserRole(int userId, int roleId) {
         String hql = "select ur from UserRole ur left join fetch ur.user u left join fetch ur.role r where u.id = ? and r.id = ?";
+        //String hql = "select ur from UserRole ur where ur.user.id = ? and ur.role.id = ?";
         return (UserRole)this.getSession().createQuery(hql).setParameter(0, userId).setParameter(1, roleId).uniqueResult();
     }
 

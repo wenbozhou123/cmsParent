@@ -5,6 +5,7 @@ import org.springframework.lang.NonNull;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -40,7 +41,7 @@ public class User {
     /**
      * 用户创建时间
      */
-    private Date createDate;
+    private Timestamp createDate;
 
     public User(int id, String username, String password, String nickname, String email, String phone, int status) {
         this.id = id;
@@ -56,7 +57,7 @@ public class User {
 
     }
 
-    public User(int id, String username, String password, String nickname, String email, String phone, int status, Date createDate) {
+    public User(int id, String username, String password, String nickname, String email, String phone, int status, Timestamp  createDate) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -129,11 +130,11 @@ public class User {
     }
 
     @Column(name="create_date")
-    public Date getCreateDate() {
+    public Timestamp  getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(Timestamp  createDate) {
         this.createDate = createDate;
     }
 }
