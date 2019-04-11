@@ -133,11 +133,11 @@ public class TestUserDao extends AbstractDbUnitTestCase {
     public void testAddUserRole() {
         UserRole actual = new UserRole(new User(1,"admin1","123", "admin1", "admin1@admin.com", "110", 1),
                 new Role(3, "文章审核人员", RoleType.ROLE_AUDIT));
-        actual.setId(6);
+        actual.setId(5);
         userDao.addUserRole(actual.getUser(), actual.getRole());
-        //s.flush();
+        s.flush();
         UserRole expected = userDao.loadUserRole(1,3);
-        //EntitiesHelper.assertUserRole(expected,actual);
+        EntitiesHelper.assertUserRole(expected,actual);
 
     }
 
